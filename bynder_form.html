@@ -1,0 +1,63 @@
+<html><head><style>
+  @font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Source Sans Pro Regular'),
+    local('SourceSansPro-Regular'),
+    url('https://d8ejoa1fys2rk.cloudfront.net/5.0.5/includes/fonts/SourceSans/sourcesanspro-regular.woff2') format('woff2'),
+    url('https://d8ejoa1fys2rk.cloudfront.net/5.0.5/includes/fonts/SourceSans/sourcesanspro-regular.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: "FontAwesome";
+    src: url("https://d8ejoa1fys2rk.cloudfront.net/5.0.5/includes/fonts/fontawesome-webfont.woff2?v=4.7.0") format("woff2"),
+    url("https://d8ejoa1fys2rk.cloudfront.net/5.0.5/includes/fonts/fontawesome-webfont.woff?v=4.7.0") format("woff");
+    font-weight: 400;
+    font-style: normal;
+  }
+</style></head><body><div style="width: 80%; margin: 0 auto">
+  <form action="/must-not-go-here">
+  <p>When displayed in a container:</p>
+  <div style="width: 50%; height: auto; overflow: auto; border: 3px solid #08f; background: #fff" id="compactViewContainer"><div style="display: flex; height: 100%;"></div></div>
+  <p>Selected assets will show up here:</p>
+  <div id="importedAssets"></div>
+  </form>
+</div>
+<script src="https://d8ejoa1fys2rk.cloudfront.net/5.0.5/modules/compactview/bynder-compactview-2-latest.js"></script>
+<script>
+  var settings = {"defaultDomain": "mdsystems.getbynder.com","assetTypes":["image","document","video","audio"],"language":"en_US","mode":"MultiSelect","container": document.getElementById('compactViewContainer')};
+
+  settings.onSuccess = function(assets) {
+    console.log(assets);
+
+    var importedAssetsContainer = document.getElementById(
+      'importedAssets',
+    );
+    importedAssetsContainer.innerHTML = '';
+
+    assets.forEach(function(asset) {
+      switch (asset.type) {
+        case 'AUDIO':
+        case 'DOCUMENT':
+        case 'IMAGE':
+          importedAssetsContainer.innerHTML +=
+            '<img src=' + asset.derivatives.webImage + ' />';
+          return;
+        case 'VIDEO':
+          importedAssetsContainer.innerHTML +=
+            '<video width="640" height="480" controls>' +
+            '<source src="' +
+            asset.previewUrls[0] +
+            '" type="video/webm">' +
+            '</video>';
+          return;
+        default:
+          return;
+      }
+    });
+  };
+
+  BynderCompactView.open(settings);
+</script>
+</body></html>
